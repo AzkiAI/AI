@@ -234,43 +234,6 @@ footer {
   z-index: 10;
 }
 
-/* رسپانسیو */
-@media (max-width: 768px) {
-  .container {
-    width: 95%;
-  }
-  
-  .question-section, .answer-section {
-    padding: 1.5rem;
-  }
-  
-  .logo {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .feedback {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-/* استایل‌های جدید برای بخش‌های اضافه شده */
-.loading {
-  position: relative;
-}
-
-.loading::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.8);
-  z-index: 10;
-}
-
 .similarity {
   color: var(--secondary-color);
   font-size: 0.9rem;
@@ -315,4 +278,24 @@ footer {
   animation: fadeIn 0.3s ease-out;
 }
 
+/* رسپانسیو */
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+  }
+  
+  .question-section, .answer-section {
+    padding: 1.5rem;
+  }
+  
+  .logo {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .feedback {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
 }
