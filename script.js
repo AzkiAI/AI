@@ -1,16 +1,11 @@
-// پایگاه داده سوالات
 let knowledgeBase = [
   {
-    "question": "پایتون چیست؟",
-    "answer": "پایتون یک زبان برنامه‌نویسی سطح بالا و ساده برای یادگیری است."
+    question: "پایتون چیست؟",
+    answer: "پایتون یک زبان برنامه‌نویسی سطح بالا و ساده برای یادگیری است."
   },
   {
-    "question": "جاوااسکریپت چیست؟",
-    "answer": "جاوااسکریپت زبان برنامه‌نویسی اصلی وب است که در مرورگر اجرا می‌شود."
-  },
-  {
-    "question": "ریاکت چیست؟",
-    "answer": "ریاکت یک کتابخانه جاوااسکریپت برای ساخت رابط کاربری است."
+    question: "جاوااسکریپت چیست؟",
+    answer: "جاوااسکریپت زبان برنامه‌نویسی اصلی وب است که در مرورگر اجرا می‌شود."
   }
 ];
 
@@ -21,82 +16,61 @@ function saveKnowledgeBase() {
 
 // بارگیری از localStorage
 function loadKnowledgeBase() {
-  const savedData = localStorage.getItem('knowledgeBase');
-  if (savedData) {
-    knowledgeBase = JSON.parse(savedData);
-  }
+  const saved = localStorage.getItem('knowledgeBase');
+  if (saved) knowledgeBase = JSON.parse(saved);
 }
 
-// نمایش شمارنده کاراکتر
 document.getElementById('question').addEventListener('input', function () {
   document.getElementById('char-count').textContent = this.value.length;
 });
 
-// تابع جستجوی پیشرفته با تطابق تقریبی
 function search() {
-  const questionInput = document.getElementById('question').value.trim();
-  const answerElement = document.getElementById('answer');
-
-  if (!questionInput) {
-    answerElement.textContent = 'لطفاً یک سوال وارد کنید.';
+  const input = document.getElementById('question').value.trim();
+  const answerBox = document.getElementById('answer');
+  if (!input) {
+    answerBox.textContent = 'لطفاً سوالی وارد کنید.';
     return;
   }
 
-  answerElement.textContent = 'در حال جستجوی پاسخ...';
-  document.getElementById('answer-box').classList.add('loading');
+  answerBox.textContent = 'در حال جستجو...';
 
   setTimeout(() => {
-    const exactMatch = knowledgeBase.find(item =>
-      item.question.toLowerCase() === questionInput.toLowerCase()
+    const exact = knowledgeBase.find(q =>
+      q.question.toLowerCase() === input.toLowerCase()
     );
 
-    if (exactMatch) {
-      answerElement.textContent = exactMatch.answer;
-      document.getElementById('answer-box').classList.remove('loading');
-      return;
-    }
-
-    const keywords = questionInput.toLowerCase().split(' ');
-    const similarQuestions = knowledgeBase.map(item => {
-      const itemKeywords = item.question.toLowerCase().split(' ');
-      const matches = keywords.filter(keyword =>
-        itemKeywords.some(itemKeyword => itemKeyword.includes(keyword))
-      );
-      return {
-        question: item.question,
-        answer: item.answer,
-        score: matches.length
-      };
-    }).filter(item => item.score > 0)
-      .sort((a, b) => b.score - a.score);
-
-    if (similarQuestions.length > 0) {
-      const bestMatch = similarQuestions[0];
-      answerElement.innerHTML = `
-        <p>شاید این پاسخ به کار شما بیاید:</p>
-        <p><strong>${bestMatch.question}</strong></p>
-        <p>${bestMatch.answer}</p>
-        <p class="similarity">(میزان تطابق: ${Math.min(100, bestMatch.score * 30)}%)</p>
-      `;
+    if (exact) {
+      answerBox.innerHTML = `<p>${exact.answer}</p>`;
     } else {
-      answerElement.innerHTML = `
-        <p>پاسخی برای سوال شما یافت نشد.</p>
-        <div class="learn-form">
-          <p>می‌خواهید به من یاد بدهید چگونه پاسخ دهم؟</p>
-          <textarea id="new-answer" placeholder="پاسخ صحیح را وارد کنید..."></textarea>
-          <button onclick="learn('${questionInput.replace(/'/g, "\\'")}')">آموختن</button>
-        </div>
-      `;
-    }
+      const keywords = input.toLowerCase().split(' ');
+      const similar = knowledgeBase.map(item => {
+        const itemWords = item.question.toLowerCase().split(' ');
+        const score = keywords.filter(k => itemWords.includes(k)).length;
+        return { ...item, score };
+      }).filter(q => q.score > 0).sort((a, b) => b.score - a.score);
 
-    document.getElementById('answer-box').classList.remove('loading');
-  }, 1000);
+      if (similar.length > 0) {
+        answerBox.innerHTML = `
+          <p>شاید منظورت این بود:</p>
+          <p><strong>${similar[0].question}</strong></p>
+          <p>${similar[0].answer}</p>
+          <p class="similarity">تطابق: ${Math.min(100, similar[0].score * 25)}%</p>
+        `;
+      } else {
+        answerBox.innerHTML = `
+          <p>پاسخی برای این سوال پیدا نشد.</p>
+          <div class="learn-form">
+            <textarea id="new-answer" placeholder="پاسخ صحیح را وارد کنید..."></textarea>
+            <button onclick="learn('${input.replace(/'/g, "\\'")}')">یاد بگیر</button>
+          </div>
+        `;
+      }
+    }
+  }, 800);
 }
 
-// تابع یادگیری سوالات جدید
 function learn(question) {
   const newAnswer = document.getElementById('new-answer').value.trim();
-
   if (!newAnswer) {
     alert('لطفاً پاسخ را وارد کنید.');
     return;
@@ -106,23 +80,17 @@ function learn(question) {
   saveKnowledgeBase();
 
   document.getElementById('answer').innerHTML = `
-    <p>ممنون! پاسخ جدید را یاد گرفتم.</p>
-    <p><strong>سوال:</strong> ${question}</p>
-    <p><strong>پاسخ:</strong> ${newAnswer}</p>
+    <p>ممنون! یاد گرفتم:</p>
+    <p><strong>${question}</strong></p>
+    <p>${newAnswer}</p>
   `;
-
-  const learnForm = document.querySelector('.learn-form');
-  if (learnForm) learnForm.remove();
 }
 
-// بارگذاری اولیه
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   loadKnowledgeBase();
   document.getElementById('year').textContent = new Date().getFullYear();
-
   document.getElementById('submit-btn').addEventListener('click', search);
-
-  document.getElementById('question').addEventListener('keypress', function (e) {
+  document.getElementById('question').addEventListener('keypress', e => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       search();
