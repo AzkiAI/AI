@@ -27,6 +27,11 @@ function loadKnowledgeBase() {
   }
 }
 
+// نمایش شمارنده کاراکتر
+document.getElementById('question').addEventListener('input', function() {
+  document.getElementById('char-count').textContent = this.value.length;
+});
+
 // تابع جستجوی پیشرفته با تطابق تقریبی
 function search() {
   const questionInput = document.getElementById('question').value.trim();
@@ -119,7 +124,7 @@ function learn(question) {
 }
 
 // بارگیری داده‌ها هنگام لود صفحه
-window.onload = function() {
+document.addEventListener('DOMContentLoaded', function() {
   loadKnowledgeBase();
   document.getElementById('year').textContent = new Date().getFullYear();
   
@@ -133,4 +138,4 @@ window.onload = function() {
       search();
     }
   });
-};
+});
