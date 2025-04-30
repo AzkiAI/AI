@@ -1,21 +1,62 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>پرسش و پاسخ ساده</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="سامانه هوشمند پرسش و پاسخ آنلاین">
+  <title>پرسش و پاسخ هوشمند | سامانه پاسخگویی آنلاین</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>💬 سامانه پرسش و پاسخ</h1>
-    <textarea id="question" placeholder="سوال خود را بنویسید..."></textarea>
-    <button onclick="search()">ارسال</button>
-    <div id="answer-box">
-      <strong>پاسخ:</strong>
-      <p id="answer"></p>
-    </div>
+  <div class="wrapper">
+    <header>
+      <div class="logo">
+        <i class="fas fa-comments"></i>
+        <h1>سامانه پرسش و پاسخ هوشمند</h1>
+      </div>
+      <p class="tagline">هر سوالی داری، اینجا بپرس!</p>
+    </header>
+
+    <main class="container">
+      <section class="question-section">
+        <div class="input-group">
+          <textarea id="question" placeholder="سوال خود را اینجا بنویسید..." rows="4"></textarea>
+          <div class="char-counter"><span id="char-count">0</span>/500</div>
+        </div>
+        <button class="submit-btn" onclick="search()">
+          <i class="fas fa-paper-plane"></i> ارسال سوال
+        </button>
+      </section>
+
+      <section class="answer-section">
+        <div class="answer-box" id="answer-box">
+          <div class="answer-header">
+            <i class="fas fa-lightbulb"></i>
+            <h2>پاسخ:</h2>
+          </div>
+          <div class="answer-content">
+            <p id="answer">پس از نوشتن سوال و کلیک روی دکمه ارسال، پاسخ اینجا نمایش داده خواهد شد.</p>
+            <div class="feedback">
+              <span>آیا این پاسخ مفید بود؟</span>
+              <button class="feedback-btn like"><i class="far fa-thumbs-up"></i></button>
+              <button class="feedback-btn dislike"><i class="far fa-thumbs-down"></i></button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>تمامی حقوق محفوظ است &copy; <span id="year"></span></p>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-telegram"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+      </div>
+    </footer>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
