@@ -27,11 +27,6 @@ function loadKnowledgeBase() {
   }
 }
 
-// نمایش شمارنده کاراکتر
-document.getElementById('question').addEventListener('input', function() {
-  document.getElementById('char-count').textContent = this.value.length;
-});
-
 // تابع جستجوی پیشرفته با تطابق تقریبی
 function search() {
   const questionInput = document.getElementById('question').value.trim();
@@ -87,7 +82,7 @@ function search() {
         <div class="learn-form">
           <p>می‌خواهید به من یاد بدهید چگونه پاسخ دهم؟</p>
           <textarea id="new-answer" placeholder="پاسخ صحیح را وارد کنید..."></textarea>
-          <button onclick="learn('${questionInput}')">آموختن</button>
+          <button onclick="learn('${questionInput.replace(/'/g, "\\'")}')">آموختن</button>
         </div>
       `;
     }
@@ -123,13 +118,19 @@ function learn(question) {
   if (learnForm) learnForm.remove();
 }
 
-// تابع برای پیشنهاد سوالات مشابه
-function showSimilarQuestions() {
-  // این تابع می‌تواند سوالات مشابه را نمایش دهد
-}
-
 // بارگیری داده‌ها هنگام لود صفحه
 window.onload = function() {
   loadKnowledgeBase();
   document.getElementById('year').textContent = new Date().getFullYear();
+  
+  // اضافه کردن event listener برای دکمه ارسال
+  document.getElementById('submit-btn').addEventListener('click', search);
+  
+  // اضافه کردن event listener برای کلید Enter
+  document.getElementById('question').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      search();
+    }
+  });
 };
